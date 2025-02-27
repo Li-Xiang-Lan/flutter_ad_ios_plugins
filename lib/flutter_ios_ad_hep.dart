@@ -119,7 +119,7 @@ class FlutterIosAdHep{
       _iosAdCallback?.showFail.call(null);
       return;
     }
-    var resultData = _getCacheResultData(adType);
+    var resultData = getCacheResultData(adType);
     if(null!=resultData){
       "flutter ios ad --->start show ad --->type:$adType--->${resultData.adBean.toString()}".log();
       if(adType==AdType.reward){
@@ -163,7 +163,7 @@ class FlutterIosAdHep{
     return adBean;
   }
 
-  LoadResultData? _getCacheResultData(AdType adType){
+  LoadResultData? getCacheResultData(AdType adType){
     var oneResult = _oneLoadAd?.getCacheAd(adType);
     if(null!=oneResult){
       return oneResult;
