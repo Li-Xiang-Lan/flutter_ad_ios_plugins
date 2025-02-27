@@ -113,12 +113,12 @@ class FlutterIosAdHep{
     required AdType adType,
     required IosAdCallback iosAdCallback,
   })async{
-    _iosAdCallback=iosAdCallback;
     if(_adShowing){
       "flutter ios ad --->ad showing".log();
-      _iosAdCallback?.showFail.call(null);
+      iosAdCallback.showFail.call(null);
       return;
     }
+    _iosAdCallback=iosAdCallback;
     var resultData = getCacheResultData(adType);
     if(null!=resultData){
       "flutter ios ad --->start show ad --->type:$adType--->${resultData.adBean.toString()}".log();
