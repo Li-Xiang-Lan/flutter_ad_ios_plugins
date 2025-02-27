@@ -52,7 +52,7 @@ class FlutterIosAdHep{
           onAdDisplayFailedCallback: (ad,error){
             _adShowing=false;
             _deleteAdCache(ad.adUnitId);
-            _loadAd(AdType.reward);
+            loadAd(AdType.reward);
             _iosAdCallback?.showFail.call(ad);
           },
           onAdClickedCallback: (ad){
@@ -60,7 +60,7 @@ class FlutterIosAdHep{
           },
           onAdHiddenCallback: (ad){
             _adShowing=false;
-            _loadAd(AdType.reward);
+            loadAd(AdType.reward);
             _iosAdCallback?.closeAd.call();
           },
           onAdReceivedRewardCallback: (ad,reward){
@@ -91,7 +91,7 @@ class FlutterIosAdHep{
           onAdDisplayFailedCallback: (ad,error){
             _adShowing=false;
             _deleteAdCache(ad.adUnitId);
-            _loadAd(AdType.interstitial);
+            loadAd(AdType.interstitial);
             _iosAdCallback?.showFail.call(ad);
           },
           onAdClickedCallback: (ad){
@@ -99,7 +99,7 @@ class FlutterIosAdHep{
           },
           onAdHiddenCallback: (ad){
             _adShowing=false;
-            _loadAd(AdType.interstitial);
+            loadAd(AdType.interstitial);
             _iosAdCallback?.closeAd.call();
           },
           onAdRevenuePaidCallback: (ad){
@@ -129,7 +129,7 @@ class FlutterIosAdHep{
           "flutter ios ad --->$adType not Ready".log();
           _deleteAdCache(resultData.adBean.adId);
           _iosAdCallback?.showFail.call(null);
-          _loadAd(adType);
+          loadAd(adType);
         }
       }else if(adType==AdType.interstitial){
         if(await AppLovinMAX.isInterstitialReady(resultData.adBean.adId)==true){
@@ -138,16 +138,16 @@ class FlutterIosAdHep{
           "flutter ios ad --->$adType not Ready".log();
           _deleteAdCache(resultData.adBean.adId);
           _iosAdCallback?.showFail.call(null);
-          _loadAd(adType);
+          loadAd(adType);
         }
       }
     }else{
-      _loadAd(adType);
+      loadAd(adType);
       _iosAdCallback?.showFail.call(null);
     }
   }
 
-  _loadAd(AdType adType){
+  loadAd(AdType adType){
     _oneLoadAd?.loadAdByType(adType);
     _twoLoadAd?.loadAdByType(adType);
   }
