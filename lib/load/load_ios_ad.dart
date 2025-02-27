@@ -124,8 +124,12 @@ class LoadIosAd{
   }
 
   updateAdList(List<AdInfoData> rewardList,List<AdInfoData> interList){
+    "flutter ios ad --->${oneAd?"one ad":"two ad"}--->update ad list ---> rewardList--->$rewardList".log();
+    "flutter ios ad --->${oneAd?"one ad":"two ad"}--->update ad list ---> interList--->$interList".log();
     _rewardList.clear();
     _interList.clear();
+    rewardList.sort((a, b) => (b.sort).compareTo(a.sort));
+    interList.sort((a, b) => (b.sort).compareTo(a.sort));
     _rewardList.addAll(rewardList);
     _interList.addAll(interList);
   }
