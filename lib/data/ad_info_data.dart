@@ -5,7 +5,7 @@ class AdInfoData{
   String adPlat;
   AdType adType;
   int expireTime;
-  String sort;
+  int sort;
   AdInfoData({
     required this.adId,
     required this.adPlat,
