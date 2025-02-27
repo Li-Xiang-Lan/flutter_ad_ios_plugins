@@ -1,7 +1,7 @@
 name: flutter_ad_ios_plugins
 description: "flutter_ad_ios_plugins"
 version: 0.0.1
-homepage:
+homepage: https://github.com/Li-Xiang-Lan/flutter_ad_ios_plugins.git
 
 environment:
   sdk: '>=3.3.3 <4.0.0'
