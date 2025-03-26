@@ -179,4 +179,6 @@ class FlutterIosAdHep{
     _oneLoadAd?.updateAdList(data.oneRewardList, data.oneInterList);
     _twoLoadAd?.updateAdList(data.twoRewardList, data.twoInterList);
   }
+
+  bool adShowing()=>_adShowing;
 }
