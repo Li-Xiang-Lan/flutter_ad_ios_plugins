@@ -20,8 +20,6 @@ class LoadIosAd{
     required List<AdInfoData> interList,
   }){
     updateAdList(rewardList,interList);
-    loadAdByType(AdType.reward);
-    loadAdByType(AdType.interstitial);
   }
 
   loadAdByType(AdType adType){
@@ -132,5 +130,7 @@ class LoadIosAd{
     interList.sort((a, b) => (b.sort).compareTo(a.sort));
     _rewardList.addAll(rewardList);
     _interList.addAll(interList);
+    loadAdByType(AdType.reward);
+    loadAdByType(AdType.interstitial);
   }
 }
