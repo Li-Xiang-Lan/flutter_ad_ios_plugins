@@ -172,16 +172,7 @@ class FlutterIosAdHep{
         }
       }
     }else{
-      if(_isNewPlan){
-        if(adType==AdType.interstitial){
-          _newIntLoadIosAd?.loadAllAd();
-        }else if(adType==AdType.reward){
-          _newRvLoadIosAd?.loadAllAd();
-        }
-      }else{
-        _oneLoadAd?.loadAdByType(adType);
-        _twoLoadAd?.loadAdByType(adType);
-      }
+      loadAdWhenNoCache(adType);
       _iosAdCallback?.showFail.call(null);
     }
   }
@@ -196,6 +187,19 @@ class FlutterIosAdHep{
     }else{
       _oneLoadAd?.loadAdByType(infoData.adType);
       _twoLoadAd?.loadAdByType(infoData.adType);
+    }
+  }
+
+  loadAdWhenNoCache(AdType adType){
+    if(_isNewPlan){
+      if(adType==AdType.interstitial){
+        _newIntLoadIosAd?.loadAllAd();
+      }else if(adType==AdType.reward){
+        _newRvLoadIosAd?.loadAllAd();
+      }
+    }else{
+      _oneLoadAd?.loadAdByType(adType);
+      _twoLoadAd?.loadAdByType(adType);
     }
   }
 
