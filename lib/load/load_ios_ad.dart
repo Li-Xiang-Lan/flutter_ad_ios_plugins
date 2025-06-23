@@ -60,7 +60,11 @@ class LoadIosAd{
     if(null!=adBean){
       "flutter ios ad --->${oneAd?"one ad":"two ad"}--->${ad.adUnitId} load ad success".log();
       _loadingList.remove(adBean.adType);
-      _resultMap[adBean.adType]=LoadResultData(loadTime: DateTime.now().millisecondsSinceEpoch, adBean: adBean);
+      _resultMap[adBean.adType]=LoadResultData(
+        loadTime: DateTime.now().millisecondsSinceEpoch,
+        adBean: adBean,
+        revenue: ad.revenue,
+      );
     }
   }
 

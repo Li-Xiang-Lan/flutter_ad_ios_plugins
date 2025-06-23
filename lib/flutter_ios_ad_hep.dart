@@ -8,6 +8,7 @@ import 'package:flutter_ad_ios_plugins/hep/ad_type.dart';
 import 'package:flutter_ad_ios_plugins/hep/hep.dart';
 import 'package:flutter_ad_ios_plugins/hep/ios_ad_callback.dart';
 import 'package:flutter_ad_ios_plugins/load/load_ios_ad.dart';
+import 'package:flutter_ad_ios_plugins/load/new_load_ios_ad.dart';
 
 class FlutterIosAdHep{
   static final FlutterIosAdHep _instance = FlutterIosAdHep();
@@ -15,7 +16,10 @@ class FlutterIosAdHep{
 
   LoadIosAd? _oneLoadAd;
   LoadIosAd? _twoLoadAd;
-  var _adShowing=false;
+  //新方案加载插屏和激励
+  NewLoadIosAd? _newIntLoadIosAd;
+  NewLoadIosAd? _newRvLoadIosAd;
+  var _adShowing=false,_isNewPlan=false;
   IosAdCallback? _iosAdCallback;
 
   initMax({
@@ -27,21 +31,37 @@ class FlutterIosAdHep{
     if(kDebugMode&&showMediationDebugger){
       AppLovinMAX.showMediationDebugger();
     }
+    _isNewPlan=data.isNewPlan;
     _setMaxAdListener();
-    _oneLoadAd=LoadIosAd(oneAd: true, rewardList: data.oneRewardList, interList: data.oneInterList);
-    _twoLoadAd=LoadIosAd(oneAd: false, rewardList: data.twoRewardList, interList: data.twoInterList);
+    if(_isNewPlan){
+      _newIntLoadIosAd=NewLoadIosAd(interAd: true, adInfoList: data.newInterList);
+      _newRvLoadIosAd=NewLoadIosAd(interAd: false, adInfoList: data.newRewardList);
+    }else{
+      _oneLoadAd=LoadIosAd(oneAd: true, rewardList: data.oneRewardList, interList: data.oneInterList);
+      _twoLoadAd=LoadIosAd(oneAd: false, rewardList: data.twoRewardList, interList: data.twoInterList);
+    }
   }
 
   _setMaxAdListener(){
     AppLovinMAX.setRewardedAdListener(
         RewardedAdListener(
           onAdLoadedCallback: (ad){
-            _oneLoadAd?.loadAdSuccess(ad);
-            _twoLoadAd?.loadAdSuccess(ad);
+            if(_isNewPlan){
+              _newIntLoadIosAd?.loadAdSuccess(ad);
+              _newRvLoadIosAd?.loadAdSuccess(ad);
+            }else{
+              _oneLoadAd?.loadAdSuccess(ad);
+              _twoLoadAd?.loadAdSuccess(ad);
+            }
           },
           onAdLoadFailedCallback: (ad,error){
-            _oneLoadAd?.loadAdFail(ad);
-            _twoLoadAd?.loadAdFail(ad);
+            if(_isNewPlan){
+              _newIntLoadIosAd?.loadAdFail(ad);
+              _newRvLoadIosAd?.loadAdFail(ad);
+            }else{
+              _oneLoadAd?.loadAdFail(ad);
+              _twoLoadAd?.loadAdFail(ad);
+            }
           },
           onAdDisplayedCallback: (ad){
             _adShowing=true;
@@ -52,7 +72,7 @@ class FlutterIosAdHep{
           onAdDisplayFailedCallback: (ad,error){
             _adShowing=false;
             _deleteAdCache(ad.adUnitId);
-            loadAd(AdType.reward);
+            loadAd(_getAdInfoBeanById(ad.adUnitId));
             _iosAdCallback?.showFail.call(ad);
           },
           onAdClickedCallback: (ad){
@@ -60,7 +80,7 @@ class FlutterIosAdHep{
           },
           onAdHiddenCallback: (ad){
             _adShowing=false;
-            loadAd(AdType.reward);
+            loadAd(_getAdInfoBeanById(ad.adUnitId));
             _iosAdCallback?.closeAd.call();
           },
           onAdReceivedRewardCallback: (ad,reward){
@@ -75,12 +95,22 @@ class FlutterIosAdHep{
     AppLovinMAX.setInterstitialListener(
         InterstitialListener(
           onAdLoadedCallback: (ad){
-            _oneLoadAd?.loadAdSuccess(ad);
-            _twoLoadAd?.loadAdSuccess(ad);
+            if(_isNewPlan){
+              _newIntLoadIosAd?.loadAdSuccess(ad);
+              _newRvLoadIosAd?.loadAdSuccess(ad);
+            }else{
+              _oneLoadAd?.loadAdSuccess(ad);
+              _twoLoadAd?.loadAdSuccess(ad);
+            }
           },
           onAdLoadFailedCallback: (ad,error){
-            _oneLoadAd?.loadAdFail(ad);
-            _twoLoadAd?.loadAdFail(ad);
+            if(_isNewPlan){
+              _newIntLoadIosAd?.loadAdFail(ad);
+              _newRvLoadIosAd?.loadAdFail(ad);
+            }else{
+              _oneLoadAd?.loadAdFail(ad);
+              _twoLoadAd?.loadAdFail(ad);
+            }
           },
           onAdDisplayedCallback: (ad){
             _adShowing=true;
@@ -91,7 +121,7 @@ class FlutterIosAdHep{
           onAdDisplayFailedCallback: (ad,error){
             _adShowing=false;
             _deleteAdCache(ad.adUnitId);
-            loadAd(AdType.interstitial);
+            loadAd(_getAdInfoBeanById(ad.adUnitId));
             _iosAdCallback?.showFail.call(ad);
           },
           onAdClickedCallback: (ad){
@@ -99,7 +129,7 @@ class FlutterIosAdHep{
           },
           onAdHiddenCallback: (ad){
             _adShowing=false;
-            loadAd(AdType.interstitial);
+            loadAd(_getAdInfoBeanById(ad.adUnitId));
             _iosAdCallback?.closeAd.call();
           },
           onAdRevenuePaidCallback: (ad){
@@ -129,7 +159,7 @@ class FlutterIosAdHep{
           "flutter ios ad --->$adType not Ready".log();
           _deleteAdCache(resultData.adBean.adId);
           _iosAdCallback?.showFail.call(null);
-          loadAd(adType);
+          loadAd(resultData.adBean);
         }
       }else if(adType==AdType.interstitial){
         if(await AppLovinMAX.isInterstitialReady(resultData.adBean.adId)==true){
@@ -138,46 +168,89 @@ class FlutterIosAdHep{
           "flutter ios ad --->$adType not Ready".log();
           _deleteAdCache(resultData.adBean.adId);
           _iosAdCallback?.showFail.call(null);
-          loadAd(adType);
+          loadAd(resultData.adBean);
         }
       }
     }else{
-      loadAd(adType);
+      if(_isNewPlan){
+        if(adType==AdType.interstitial){
+          _newIntLoadIosAd?.loadAllAd();
+        }else if(adType==AdType.reward){
+          _newRvLoadIosAd?.loadAllAd();
+        }
+      }else{
+        _oneLoadAd?.loadAdByType(adType);
+        _twoLoadAd?.loadAdByType(adType);
+      }
       _iosAdCallback?.showFail.call(null);
     }
   }
 
-  loadAd(AdType adType){
-    _oneLoadAd?.loadAdByType(adType);
-    _twoLoadAd?.loadAdByType(adType);
+  loadAd(AdInfoData? infoData){
+    if(null==infoData){
+      return;
+    }
+    if(_isNewPlan){
+      _newIntLoadIosAd?.loadAdById(infoData);
+      _newRvLoadIosAd?.loadAdById(infoData);
+    }else{
+      _oneLoadAd?.loadAdByType(infoData.adType);
+      _twoLoadAd?.loadAdByType(infoData.adType);
+    }
   }
 
   _deleteAdCache(String id){
-    _oneLoadAd?.deleteCache(id);
-    _twoLoadAd?.deleteCache(id);
+    if(_isNewPlan){
+      _newIntLoadIosAd?.deleteCache(id);
+      _newRvLoadIosAd?.deleteCache(id);
+    }else{
+      _oneLoadAd?.deleteCache(id);
+      _twoLoadAd?.deleteCache(id);
+    }
   }
 
   AdInfoData? _getAdInfoBeanById(String id){
-    var adBean = _oneLoadAd?.getAdInfoBeanById(id);
-    adBean ??= _twoLoadAd?.getAdInfoBeanById(id);
-    return adBean;
+    if(_isNewPlan){
+      var adBean = _newIntLoadIosAd?.getAdInfoBeanById(id);
+      adBean ??= _newRvLoadIosAd?.getAdInfoBeanById(id);
+      return adBean;
+    }else{
+      var adBean = _oneLoadAd?.getAdInfoBeanById(id);
+      adBean ??= _twoLoadAd?.getAdInfoBeanById(id);
+      return adBean;
+    }
   }
 
   LoadResultData? getCacheResultData(AdType adType){
-    var oneResult = _oneLoadAd?.getCacheAd(adType);
-    if(null!=oneResult){
-      return oneResult;
+    if(_isNewPlan){
+      if(adType==AdType.interstitial){
+        return _newIntLoadIosAd?.getCashAd();
+      }else if(adType==AdType.reward){
+        return _newRvLoadIosAd?.getCashAd();
+      }else{
+        return null;
+      }
+    }else{
+      var oneResult = _oneLoadAd?.getCacheAd(adType);
+      if(null!=oneResult){
+        return oneResult;
+      }
+      var twoResult = _twoLoadAd?.getCacheAd(adType);
+      if(null!=twoResult){
+        return twoResult;
+      }
+      return null;
     }
-    var twoResult = _twoLoadAd?.getCacheAd(adType);
-    if(null!=twoResult){
-      return twoResult;
-    }
-    return null;
   }
 
   updateAdData(ConfigAdData data){
-    _oneLoadAd?.updateAdList(data.oneRewardList, data.oneInterList);
-    _twoLoadAd?.updateAdList(data.twoRewardList, data.twoInterList);
+    _isNewPlan=data.isNewPlan;
+    if(_isNewPlan){
+
+    }else{
+      _oneLoadAd?.updateAdList(data.oneRewardList, data.oneInterList);
+      _twoLoadAd?.updateAdList(data.twoRewardList, data.twoInterList);
+    }
   }
 
   bool adShowing()=>_adShowing;
