@@ -137,20 +137,21 @@ class FlutterIosAdHep{
     var resultData = getCacheResultData(adType);
     if(null!=resultData){
       "flutter ios ad --->start show ad --->type:$adType--->${resultData.adBean.toString()}".log();
-      if(adType==AdType.reward){
+      var newAdType = resultData.adBean.adType;
+      if(newAdType==AdType.reward){
         if(await AppLovinMAX.isRewardedAdReady(resultData.adBean.adId)==true){
           AppLovinMAX.showRewardedAd(resultData.adBean.adId);
         }else{
-          "flutter ios ad --->$adType not Ready".log();
+          "flutter ios ad --->$newAdType not Ready".log();
           _deleteAdCache(resultData.adBean.adId);
           _iosAdCallback?.showFail.call(null);
           loadAd(resultData.adBean);
         }
-      }else if(adType==AdType.interstitial){
+      }else if(newAdType==AdType.interstitial){
         if(await AppLovinMAX.isInterstitialReady(resultData.adBean.adId)==true){
           AppLovinMAX.showInterstitial(resultData.adBean.adId);
         }else{
-          "flutter ios ad --->$adType not Ready".log();
+          "flutter ios ad --->$newAdType not Ready".log();
           _deleteAdCache(resultData.adBean.adId);
           _iosAdCallback?.showFail.call(null);
           loadAd(resultData.adBean);
