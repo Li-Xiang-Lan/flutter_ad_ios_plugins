@@ -61,7 +61,7 @@ class NewLoadIosAd{
   loadAdSuccess(MaxAd ad){
     var adBean = getAdInfoBeanById(ad.adUnitId);
     if(null!=adBean){
-      "flutter ios ad --->${interAd?"inter ad":"rv ad"}--->${ad.adUnitId} load ad success".log();
+      "flutter ios ad --->${interAd?"inter ad":"rv ad"}--->${ad.adUnitId} load ad success--->revenue:${ad.revenue}".log();
       _loadingList.remove(adBean.adId);
       _resultMap[adBean.adId]=LoadResultData(
         loadTime: DateTime.now().millisecondsSinceEpoch,

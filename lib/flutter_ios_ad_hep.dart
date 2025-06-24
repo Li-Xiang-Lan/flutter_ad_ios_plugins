@@ -209,14 +209,20 @@ class FlutterIosAdHep{
 
   LoadResultData? getCacheResultData(AdType adType){
     if(_isNewPlan){
+      "flutter ios ad --->get cache from new plan".log();
       if(adType==AdType.interstitial){
-        return _newIntLoadIosAd?.getCashAd();
+        var cashAd = _newIntLoadIosAd?.getCashAd();
+        "flutter ios ad --->get cache from new plan--->ID: ${cashAd?.adBean.adId}--->revenue:${cashAd?.revenue}".log();
+        return cashAd;
       }else if(adType==AdType.reward){
-        return _newRvLoadIosAd?.getCashAd();
+        var cashAd = _newRvLoadIosAd?.getCashAd();
+        "flutter ios ad --->get cache from new plan--->ID: ${cashAd?.adBean.adId}--->revenue:${cashAd?.revenue}".log();
+        return cashAd;
       }else{
         return null;
       }
     }else{
+      "flutter ios ad --->get cache from old plan".log();
       var oneResult = _oneLoadAd?.getCacheAd(adType);
       if(null!=oneResult){
         return oneResult;
