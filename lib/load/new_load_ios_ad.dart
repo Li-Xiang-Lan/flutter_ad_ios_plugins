@@ -38,6 +38,10 @@ class NewLoadIosAd{
   }
 
   bool loadAdById(AdInfoData value){
+    var indexWhere = _adInfoList.indexWhere((element) => element.adId==value.adId);
+    if(indexWhere<0){
+      return false;
+    }
     if (_loadingList.contains(value.adId)) {
       "flutter ios ad --->${interAd ? "inter ad" : "rv ad"}--->${value.adId} is loading".log();
       return false;
