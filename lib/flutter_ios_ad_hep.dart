@@ -33,13 +33,10 @@ class FlutterIosAdHep{
     }
     _isNewPlan=data.isNewPlan;
     _setMaxAdListener();
-    if(_isNewPlan){
-      _newIntLoadIosAd=NewLoadIosAd(interAd: true, adInfoList: data.newInterList);
-      _newRvLoadIosAd=NewLoadIosAd(interAd: false, adInfoList: data.newRewardList);
-    }else{
-      _oneLoadAd=LoadIosAd(oneAd: true, rewardList: data.oneRewardList, interList: data.oneInterList);
-      _twoLoadAd=LoadIosAd(oneAd: false, rewardList: data.twoRewardList, interList: data.twoInterList);
-    }
+    _newIntLoadIosAd=NewLoadIosAd(interAd: true, adInfoList: data.newInterList);
+    _newRvLoadIosAd=NewLoadIosAd(interAd: false, adInfoList: data.newRewardList);
+    _oneLoadAd=LoadIosAd(oneAd: true, rewardList: data.oneRewardList, interList: data.oneInterList);
+    _twoLoadAd=LoadIosAd(oneAd: false, rewardList: data.twoRewardList, interList: data.twoInterList);
   }
 
   _setMaxAdListener(){
@@ -250,7 +247,8 @@ class FlutterIosAdHep{
   updateAdData(ConfigAdData data){
     _isNewPlan=data.isNewPlan;
     if(_isNewPlan){
-
+      _newIntLoadIosAd?.updateAdList(data.newInterList);
+      _newRvLoadIosAd?.updateAdList(data.newRewardList);
     }else{
       _oneLoadAd?.updateAdList(data.oneRewardList, data.oneInterList);
       _twoLoadAd?.updateAdList(data.twoRewardList, data.twoInterList);

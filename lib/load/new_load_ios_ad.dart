@@ -21,6 +21,10 @@ class NewLoadIosAd{
   }
 
   loadAllAd(){
+    if(_adInfoList.isEmpty){
+      "flutter ios ad --->${interAd?"inter ad":"rv ad"}--->list is empty".log();
+      return;
+    }
     if(AdNumHep.instance.notLoad()){
       "flutter ios ad --->${interAd?"inter ad":"rv ad"}--->show or click max, not load ad".log();
       return;
