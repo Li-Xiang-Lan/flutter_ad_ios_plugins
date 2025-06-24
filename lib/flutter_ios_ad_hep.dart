@@ -43,22 +43,16 @@ class FlutterIosAdHep{
     AppLovinMAX.setRewardedAdListener(
         RewardedAdListener(
           onAdLoadedCallback: (ad){
-            if(_isNewPlan){
-              _newIntLoadIosAd?.loadAdSuccess(ad);
-              _newRvLoadIosAd?.loadAdSuccess(ad);
-            }else{
-              _oneLoadAd?.loadAdSuccess(ad);
-              _twoLoadAd?.loadAdSuccess(ad);
-            }
+            _newIntLoadIosAd?.loadAdSuccess(ad);
+            _newRvLoadIosAd?.loadAdSuccess(ad);
+            _oneLoadAd?.loadAdSuccess(ad);
+            _twoLoadAd?.loadAdSuccess(ad);
           },
           onAdLoadFailedCallback: (ad,error){
-            if(_isNewPlan){
-              _newIntLoadIosAd?.loadAdFail(ad);
-              _newRvLoadIosAd?.loadAdFail(ad);
-            }else{
-              _oneLoadAd?.loadAdFail(ad);
-              _twoLoadAd?.loadAdFail(ad);
-            }
+            _newIntLoadIosAd?.loadAdFail(ad);
+            _newRvLoadIosAd?.loadAdFail(ad);
+            _oneLoadAd?.loadAdFail(ad);
+            _twoLoadAd?.loadAdFail(ad);
           },
           onAdDisplayedCallback: (ad){
             _adShowing=true;
@@ -92,22 +86,16 @@ class FlutterIosAdHep{
     AppLovinMAX.setInterstitialListener(
         InterstitialListener(
           onAdLoadedCallback: (ad){
-            if(_isNewPlan){
-              _newIntLoadIosAd?.loadAdSuccess(ad);
-              _newRvLoadIosAd?.loadAdSuccess(ad);
-            }else{
-              _oneLoadAd?.loadAdSuccess(ad);
-              _twoLoadAd?.loadAdSuccess(ad);
-            }
+            _newIntLoadIosAd?.loadAdSuccess(ad);
+            _newRvLoadIosAd?.loadAdSuccess(ad);
+            _oneLoadAd?.loadAdSuccess(ad);
+            _twoLoadAd?.loadAdSuccess(ad);
           },
           onAdLoadFailedCallback: (ad,error){
-            if(_isNewPlan){
-              _newIntLoadIosAd?.loadAdFail(ad);
-              _newRvLoadIosAd?.loadAdFail(ad);
-            }else{
-              _oneLoadAd?.loadAdFail(ad);
-              _twoLoadAd?.loadAdFail(ad);
-            }
+            _newIntLoadIosAd?.loadAdFail(ad);
+            _newRvLoadIosAd?.loadAdFail(ad);
+            _oneLoadAd?.loadAdFail(ad);
+            _twoLoadAd?.loadAdFail(ad);
           },
           onAdDisplayedCallback: (ad){
             _adShowing=true;
@@ -201,13 +189,10 @@ class FlutterIosAdHep{
   }
 
   _deleteAdCache(String id){
-    if(_isNewPlan){
-      _newIntLoadIosAd?.deleteCache(id);
-      _newRvLoadIosAd?.deleteCache(id);
-    }else{
-      _oneLoadAd?.deleteCache(id);
-      _twoLoadAd?.deleteCache(id);
-    }
+    _newIntLoadIosAd?.deleteCache(id);
+    _newRvLoadIosAd?.deleteCache(id);
+    _oneLoadAd?.deleteCache(id);
+    _twoLoadAd?.deleteCache(id);
   }
 
   AdInfoData? _getAdInfoBeanById(String id){
