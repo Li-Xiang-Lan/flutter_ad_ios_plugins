@@ -4,6 +4,7 @@ import 'package:flutter_ad_ios_plugins/data/load_result_data.dart';
 import 'package:flutter_ad_ios_plugins/hep/ad_num_hep.dart';
 import 'package:flutter_ad_ios_plugins/hep/ad_type.dart';
 import 'package:flutter_ad_ios_plugins/hep/hep.dart';
+import 'package:flutter_ad_ios_plugins/hep/ios_load_ad_result_callback.dart';
 
 ///新版加载广告
 class NewLoadIosAd{
@@ -11,12 +12,14 @@ class NewLoadIosAd{
   final List<AdInfoData> _adInfoList=[];
   final List<String> _loadingList=[];
   final Map<String,LoadResultData> _resultMap={};
-
+  IosLoadAdResultCallback? _iosLoadAdResultCallback;
 
   NewLoadIosAd({
     required this.interAd,
     required List<AdInfoData> adInfoList,
+    required IosLoadAdResultCallback iosLoadAdResultCallback,
   }){
+    _iosLoadAdResultCallback=iosLoadAdResultCallback;
     updateAdList(adInfoList);
   }
 
@@ -53,8 +56,10 @@ class NewLoadIosAd{
     _loadingList.add(value.adId);
     "flutter ios ad --->${interAd ? "inter ad" : "rv ad"}--->start load ${value.adId} ,info=>${value.toString()}".log();
     if (value.adType == AdType.reward) {
+      _iosLoadAdResultCallback?.startLoadAdCallback.call(value);
       AppLovinMAX.loadRewardedAd(value.adId);
     } else if (value.adType == AdType.interstitial) {
+      _iosLoadAdResultCallback?.startLoadAdCallback.call(value);
       AppLovinMAX.loadInterstitial(value.adId);
     } else {
       _loadingList.remove(value.adId);
@@ -66,6 +71,7 @@ class NewLoadIosAd{
     var adBean = getAdInfoBeanById(ad.adUnitId);
     if(null!=adBean){
       "flutter ios ad --->${interAd?"inter ad":"rv ad"}--->${ad.adUnitId} load ad success--->revenue:${ad.revenue}".log();
+      _iosLoadAdResultCallback?.loadAdSuccessCallback.call(ad,adBean);
       _loadingList.remove(adBean.adId);
       _resultMap[adBean.adId]=LoadResultData(
         loadTime: DateTime.now().millisecondsSinceEpoch,
@@ -79,6 +85,7 @@ class NewLoadIosAd{
     var adBean = getAdInfoBeanById(id);
     if(null!=adBean){
       "flutter ios ad --->${interAd?"inter ad":"rv ad"}--->$id load ad fail".log();
+      _iosLoadAdResultCallback?.loadAdFailCallback.call(adBean);
       _loadingList.remove(adBean.adId);
       loadAdById(adBean);
     }

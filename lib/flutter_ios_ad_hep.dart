@@ -7,6 +7,7 @@ import 'package:flutter_ad_ios_plugins/hep/ad_num_hep.dart';
 import 'package:flutter_ad_ios_plugins/hep/ad_type.dart';
 import 'package:flutter_ad_ios_plugins/hep/hep.dart';
 import 'package:flutter_ad_ios_plugins/hep/ios_ad_callback.dart';
+import 'package:flutter_ad_ios_plugins/hep/ios_load_ad_result_callback.dart';
 import 'package:flutter_ad_ios_plugins/load/load_ios_ad.dart';
 import 'package:flutter_ad_ios_plugins/load/new_load_ios_ad.dart';
 
@@ -25,6 +26,7 @@ class FlutterIosAdHep{
   initMax({
     required String maxKey,
     required ConfigAdData data,
+    required IosLoadAdResultCallback iosLoadAdResultCallback,
     bool showMediationDebugger=false,
   })async{
     await AppLovinMAX.initialize(maxKey);
@@ -33,10 +35,10 @@ class FlutterIosAdHep{
     }
     _isNewPlan=data.isNewPlan;
     _setMaxAdListener();
-    _newIntLoadIosAd=NewLoadIosAd(interAd: true, adInfoList: data.newInterList);
-    _newRvLoadIosAd=NewLoadIosAd(interAd: false, adInfoList: data.newRewardList);
-    _oneLoadAd=LoadIosAd(oneAd: true, rewardList: data.oneRewardList, interList: data.oneInterList);
-    _twoLoadAd=LoadIosAd(oneAd: false, rewardList: data.twoRewardList, interList: data.twoInterList);
+    _newIntLoadIosAd=NewLoadIosAd(interAd: true, adInfoList: data.newInterList,iosLoadAdResultCallback: iosLoadAdResultCallback);
+    _newRvLoadIosAd=NewLoadIosAd(interAd: false, adInfoList: data.newRewardList,iosLoadAdResultCallback: iosLoadAdResultCallback);
+    _oneLoadAd=LoadIosAd(oneAd: true, rewardList: data.oneRewardList, interList: data.oneInterList,iosLoadAdResultCallback: iosLoadAdResultCallback);
+    _twoLoadAd=LoadIosAd(oneAd: false, rewardList: data.twoRewardList, interList: data.twoInterList,iosLoadAdResultCallback: iosLoadAdResultCallback);
   }
 
   _setMaxAdListener(){
