@@ -35,10 +35,11 @@ class FlutterIosAdHep{
     }
     _isNewPlan=data.isNewPlan;
     _setMaxAdListener();
-    _newIntLoadIosAd=NewLoadIosAd(interAd: true, adInfoList: data.newInterList,iosLoadAdResultCallback: iosLoadAdResultCallback);
-    _newRvLoadIosAd=NewLoadIosAd(interAd: false, adInfoList: data.newRewardList,iosLoadAdResultCallback: iosLoadAdResultCallback);
-    _oneLoadAd=LoadIosAd(oneAd: true, rewardList: data.oneRewardList, interList: data.oneInterList,iosLoadAdResultCallback: iosLoadAdResultCallback);
-    _twoLoadAd=LoadIosAd(oneAd: false, rewardList: data.twoRewardList, interList: data.twoInterList,iosLoadAdResultCallback: iosLoadAdResultCallback);
+    _newIntLoadIosAd=NewLoadIosAd(interAd: true, iosLoadAdResultCallback: iosLoadAdResultCallback);
+    _newRvLoadIosAd=NewLoadIosAd(interAd: false, iosLoadAdResultCallback: iosLoadAdResultCallback);
+    _oneLoadAd=LoadIosAd(oneAd: true,iosLoadAdResultCallback: iosLoadAdResultCallback);
+    _twoLoadAd=LoadIosAd(oneAd: false,iosLoadAdResultCallback: iosLoadAdResultCallback);
+    updateAdData(data);
   }
 
   _setMaxAdListener(){

@@ -13,17 +13,12 @@ class LoadIosAd{
   final List<AdInfoData> _interList=[];
   final List<AdType> _loadingList=[];
   final Map<AdType,LoadResultData> _resultMap={};
-  IosLoadAdResultCallback? _iosLoadAdResultCallback;
+  IosLoadAdResultCallback iosLoadAdResultCallback;
 
   LoadIosAd({
     required this.oneAd,
-    required List<AdInfoData> rewardList,
-    required List<AdInfoData> interList,
-    required IosLoadAdResultCallback iosLoadAdResultCallback,
-  }){
-    _iosLoadAdResultCallback=iosLoadAdResultCallback;
-    updateAdList(rewardList,interList);
-  }
+    required this.iosLoadAdResultCallback,
+  });
 
   loadAdByType(AdType adType){
     if(AdNumHep.instance.notLoad()){
@@ -50,10 +45,10 @@ class LoadIosAd{
   _startLoadAd(AdType type, AdInfoData bean){
     "flutter ios ad --->${oneAd?"one ad":"two ad"}--->start load $type ad ,info=>${bean.toString()}".log();
     if(type==AdType.reward){
-      _iosLoadAdResultCallback?.startLoadAdCallback.call(bean);
+      iosLoadAdResultCallback.startLoadAdCallback.call(bean);
       AppLovinMAX.loadRewardedAd(bean.adId);
     }else if(type==AdType.interstitial){
-      _iosLoadAdResultCallback?.startLoadAdCallback.call(bean);
+      iosLoadAdResultCallback.startLoadAdCallback.call(bean);
       AppLovinMAX.loadInterstitial(bean.adId);
     }else{
       _loadingList.remove(type);
@@ -64,7 +59,7 @@ class LoadIosAd{
     var adBean = getAdInfoBeanById(ad.adUnitId);
     if(null!=adBean){
       "flutter ios ad --->${oneAd?"one ad":"two ad"}--->${ad.adUnitId} load ad success".log();
-      _iosLoadAdResultCallback?.loadAdSuccessCallback.call(ad,adBean);
+      iosLoadAdResultCallback.loadAdSuccessCallback.call(ad,adBean);
       _loadingList.remove(adBean.adType);
       _resultMap[adBean.adType]=LoadResultData(
         loadTime: DateTime.now().millisecondsSinceEpoch,
@@ -78,7 +73,7 @@ class LoadIosAd{
     var adBean = getAdInfoBeanById(id);
     if(null!=adBean){
       "flutter ios ad --->${oneAd?"one ad":"two ad"}--->$id load ad fail".log();
-      _iosLoadAdResultCallback?.loadAdFailCallback.call(adBean);
+      iosLoadAdResultCallback.loadAdFailCallback.call(adBean);
       var nextAdBean = _getNextAdBean(id);
       if(null!=nextAdBean){
         _startLoadAd(adBean.adType,nextAdBean);
