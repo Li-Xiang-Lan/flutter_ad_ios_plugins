@@ -5,7 +5,7 @@ flutter_ad_ios_plugins
 ## Getting Started
 
 0.0.9 no B plan
-0.1.0 has B plan
+0.1.1 has B plan
 
 This project is a starting point for a Flutter
 [plug-in package](https://flutter.dev/developing-packages/),
