@@ -8,19 +8,16 @@ import 'package:flutter_ad_ios_plugins/hep/ad_type.dart';
 import 'package:flutter_ad_ios_plugins/hep/hep.dart';
 import 'package:flutter_ad_ios_plugins/hep/ios_ad_callback.dart';
 import 'package:flutter_ad_ios_plugins/hep/ios_load_ad_result_callback.dart';
-import 'package:flutter_ad_ios_plugins/load/load_ios_ad.dart';
 import 'package:flutter_ad_ios_plugins/load/new_load_ios_ad.dart';
 
 class FlutterIosAdHep{
   static final FlutterIosAdHep _instance = FlutterIosAdHep();
   static FlutterIosAdHep get instance => _instance;
 
-  LoadIosAd? _oneLoadAd;
-  LoadIosAd? _twoLoadAd;
   //新方案加载插屏和激励
   NewLoadIosAd? _newIntLoadIosAd;
   NewLoadIosAd? _newRvLoadIosAd;
-  var _adShowing=false,_isNewPlan=false;
+  var _adShowing=false;
   IosAdCallback? _iosAdCallback;
 
   initMax({
@@ -33,12 +30,9 @@ class FlutterIosAdHep{
     if(kDebugMode&&showMediationDebugger){
       AppLovinMAX.showMediationDebugger();
     }
-    _isNewPlan=data.isNewPlan;
     _setMaxAdListener();
     _newIntLoadIosAd=NewLoadIosAd(interAd: true, iosLoadAdResultCallback: iosLoadAdResultCallback);
     _newRvLoadIosAd=NewLoadIosAd(interAd: false, iosLoadAdResultCallback: iosLoadAdResultCallback);
-    _oneLoadAd=LoadIosAd(oneAd: true,iosLoadAdResultCallback: iosLoadAdResultCallback);
-    _twoLoadAd=LoadIosAd(oneAd: false,iosLoadAdResultCallback: iosLoadAdResultCallback);
     updateAdData(data);
   }
 
@@ -48,14 +42,10 @@ class FlutterIosAdHep{
           onAdLoadedCallback: (ad){
             _newIntLoadIosAd?.loadAdSuccess(ad);
             _newRvLoadIosAd?.loadAdSuccess(ad);
-            _oneLoadAd?.loadAdSuccess(ad);
-            _twoLoadAd?.loadAdSuccess(ad);
           },
           onAdLoadFailedCallback: (ad,error){
             _newIntLoadIosAd?.loadAdFail(ad);
             _newRvLoadIosAd?.loadAdFail(ad);
-            _oneLoadAd?.loadAdFail(ad);
-            _twoLoadAd?.loadAdFail(ad);
           },
           onAdDisplayedCallback: (ad){
             _adShowing=true;
@@ -91,14 +81,10 @@ class FlutterIosAdHep{
           onAdLoadedCallback: (ad){
             _newIntLoadIosAd?.loadAdSuccess(ad);
             _newRvLoadIosAd?.loadAdSuccess(ad);
-            _oneLoadAd?.loadAdSuccess(ad);
-            _twoLoadAd?.loadAdSuccess(ad);
           },
           onAdLoadFailedCallback: (ad,error){
             _newIntLoadIosAd?.loadAdFail(ad);
             _newRvLoadIosAd?.loadAdFail(ad);
-            _oneLoadAd?.loadAdFail(ad);
-            _twoLoadAd?.loadAdFail(ad);
           },
           onAdDisplayedCallback: (ad){
             _adShowing=true;
@@ -170,84 +156,47 @@ class FlutterIosAdHep{
     if(null==infoData){
       return;
     }
-    if(_isNewPlan){
-      _newIntLoadIosAd?.loadAdById(infoData);
-      _newRvLoadIosAd?.loadAdById(infoData);
-    }else{
-      _oneLoadAd?.loadAdByType(infoData.adType);
-      _twoLoadAd?.loadAdByType(infoData.adType);
-    }
+    _newIntLoadIosAd?.loadAdById(infoData);
+    _newRvLoadIosAd?.loadAdById(infoData);
   }
 
   loadAdWhenNoCache(AdType adType){
-    if(_isNewPlan){
-      if(adType==AdType.interstitial){
-        _newIntLoadIosAd?.loadAllAd();
-      }else if(adType==AdType.reward){
-        _newRvLoadIosAd?.loadAllAd();
-      }
-    }else{
-      _oneLoadAd?.loadAdByType(adType);
-      _twoLoadAd?.loadAdByType(adType);
+    if(adType==AdType.interstitial){
+      _newIntLoadIosAd?.loadAllAd();
+    }else if(adType==AdType.reward){
+      _newRvLoadIosAd?.loadAllAd();
     }
   }
 
   _deleteAdCache(String id){
     _newIntLoadIosAd?.deleteCache(id);
     _newRvLoadIosAd?.deleteCache(id);
-    _oneLoadAd?.deleteCache(id);
-    _twoLoadAd?.deleteCache(id);
   }
 
   AdInfoData? _getAdInfoBeanById(String id){
-    if(_isNewPlan){
-      var adBean = _newIntLoadIosAd?.getAdInfoBeanById(id);
-      adBean ??= _newRvLoadIosAd?.getAdInfoBeanById(id);
-      return adBean;
-    }else{
-      var adBean = _oneLoadAd?.getAdInfoBeanById(id);
-      adBean ??= _twoLoadAd?.getAdInfoBeanById(id);
-      return adBean;
-    }
+    var adBean = _newIntLoadIosAd?.getAdInfoBeanById(id);
+    adBean ??= _newRvLoadIosAd?.getAdInfoBeanById(id);
+    return adBean;
   }
 
   LoadResultData? getCacheResultData(AdType adType){
-    if(_isNewPlan){
-      "flutter ios ad --->get cache from new plan".log();
-      if(adType==AdType.interstitial){
-        var cashAd = _newIntLoadIosAd?.getCashAd();
-        "flutter ios ad --->get cache from new plan--->ID: ${cashAd?.adBean.adId}--->revenue:${cashAd?.revenue}".log();
-        return cashAd;
-      }else if(adType==AdType.reward){
-        var cashAd = _newRvLoadIosAd?.getCashAd();
-        "flutter ios ad --->get cache from new plan--->ID: ${cashAd?.adBean.adId}--->revenue:${cashAd?.revenue}".log();
-        return cashAd;
-      }else{
-        return null;
-      }
+    "flutter ios ad --->get cache from new plan".log();
+    if(adType==AdType.interstitial){
+      var cashAd = _newIntLoadIosAd?.getCashAd();
+      "flutter ios ad --->get cache from new plan--->ID: ${cashAd?.adBean.adId}--->revenue:${cashAd?.revenue}".log();
+      return cashAd;
+    }else if(adType==AdType.reward){
+      var cashAd = _newRvLoadIosAd?.getCashAd();
+      "flutter ios ad --->get cache from new plan--->ID: ${cashAd?.adBean.adId}--->revenue:${cashAd?.revenue}".log();
+      return cashAd;
     }else{
-      "flutter ios ad --->get cache from old plan".log();
-      var oneResult = _oneLoadAd?.getCacheAd(adType);
-      if(null!=oneResult){
-        return oneResult;
-      }
-      var twoResult = _twoLoadAd?.getCacheAd(adType);
-      if(null!=twoResult){
-        return twoResult;
-      }
       return null;
     }
   }
 
   updateAdData(ConfigAdData data){
-    _isNewPlan=data.isNewPlan;
-    if(_isNewPlan){
-      _newIntLoadIosAd?.updateAdList(data.newInterList);
-      _newRvLoadIosAd?.updateAdList(data.newRewardList);
-    }else{
-      _oneLoadAd?.updateAdList(data.oneRewardList, data.oneInterList);
-      _twoLoadAd?.updateAdList(data.twoRewardList, data.twoInterList);
-    }
+    _newIntLoadIosAd?.updateAdList(data.newInterList);
+    _newRvLoadIosAd?.updateAdList(data.newRewardList);
   }
 
   bool adShowing()=>_adShowing;
