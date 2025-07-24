@@ -5,17 +5,17 @@ class AdInfoData{
   String adPlat;
   AdType adType;
   int expireTime;
-  int sort;
+  // int sort;
   AdInfoData({
     required this.adId,
     required this.adPlat,
     required this.adType,
     required this.expireTime,
-    required this.sort,
+    // required this.sort,
   });
 
   @override
   String toString() {
-    return 'AdInfoData{adId: $adId, adPlat: $adPlat, adType: $adType, expireTime: $expireTime, sort: $sort}';
+    return 'AdInfoData{adId: $adId, adPlat: $adPlat, adType: $adType, expireTime: $expireTime}';
   }
 }

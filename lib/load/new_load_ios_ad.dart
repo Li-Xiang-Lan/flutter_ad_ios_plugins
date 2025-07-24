@@ -141,7 +141,7 @@ class NewLoadIosAd{
   updateAdList(List<AdInfoData> adInfoList){
     "flutter ios ad --->${interAd?"inter ad":"rv ad"}--->update ad list ---> adInfoList--->$adInfoList".log();
     _adInfoList.clear();
-    adInfoList.sort((a, b) => (b.sort).compareTo(a.sort));
+    // adInfoList.sort((a, b) => (b.sort).compareTo(a.sort));
     _adInfoList.addAll(adInfoList);
     loadAllAd();
   }
