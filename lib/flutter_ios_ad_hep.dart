@@ -17,7 +17,7 @@ class FlutterIosAdHep{
   //新方案加载插屏和激励
   NewLoadIosAd? _newIntLoadIosAd;
   NewLoadIosAd? _newRvLoadIosAd;
-  var _adShowing=false;
+  var _adShowing=false,_priceSwitch=false;
   IosAdCallback? _iosAdCallback;
 
   initMax({
@@ -180,21 +180,33 @@ class FlutterIosAdHep{
   }
 
   LoadResultData? getCacheResultData(AdType adType){
-    "flutter ios ad --->get cache from new plan".log();
     if(adType==AdType.interstitial){
       var cashAd = _newIntLoadIosAd?.getCashAd();
-      "flutter ios ad --->get cache from new plan--->ID: ${cashAd?.adBean.adId}--->revenue:${cashAd?.revenue}".log();
+      "flutter ios ad --->get int cache--->ID: ${cashAd?.adBean.adId}--->revenue:${cashAd?.revenue}".log();
       return cashAd;
     }else if(adType==AdType.reward){
-      var cashAd = _newRvLoadIosAd?.getCashAd();
-      "flutter ios ad --->get cache from new plan--->ID: ${cashAd?.adBean.adId}--->revenue:${cashAd?.revenue}".log();
-      return cashAd;
+      if(!_priceSwitch){
+        var cashAd = _newRvLoadIosAd?.getCashAd();
+        "flutter ios ad --->get rv cache--->only contrast rv--->ID: ${cashAd?.adBean.adId}--->revenue:${cashAd?.revenue}".log();
+        return cashAd;
+      }else{
+        var list = (_newIntLoadIosAd?.getHasCacheResultList()??[])+(_newRvLoadIosAd?.getHasCacheResultList()??[]);
+        if(list.isEmpty){
+          "flutter ios ad --->get rv cache--->contrast rv and int--->ID: no--->revenue: no".log();
+          return null;
+        }
+        list.sort((a, b) => (b.revenue).compareTo(a.revenue));
+        var first = list.first;
+        "flutter ios ad --->get rv cache--->contrast rv and int--->ID: ${first.adBean.adId}--->revenue: ${first.revenue}".log();
+        return first;
+      }
     }else{
       return null;
     }
   }
 
   updateAdData(ConfigAdData data){
+    _priceSwitch=data.priceSwitch;
     _newIntLoadIosAd?.updateAdList(data.newInterList);
     _newRvLoadIosAd?.updateAdList(data.newRewardList);
   }

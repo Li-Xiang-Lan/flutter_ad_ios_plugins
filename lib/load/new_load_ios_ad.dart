@@ -123,6 +123,17 @@ class NewLoadIosAd{
     return list.first;
   }
 
+  List<LoadResultData> getHasCacheResultList(){
+    List<LoadResultData> list=[];
+    for (var value in _resultMap.keys) {
+      var data = _resultMap[value];
+      if(null!=data&&checkHasCache(data.adBean.adId)){
+        list.add(data);
+      }
+    }
+    return list;
+  }
+
   deleteCache(String? adId){
     _resultMap.removeWhere((key,value)=>value.adBean.adId==adId);
   }
