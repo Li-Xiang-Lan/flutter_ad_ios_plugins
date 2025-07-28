@@ -5,12 +5,12 @@ class IosAdCallback{
   Function(MaxAd? ad,AdInfoData? bean) showSuccess;
   Function(MaxAd? ad) showFail;
   Function() closeAd;
-  Function(MaxAd? ad,AdInfoData? bean) onAdRevenuePaidCallback;
+  Function(MaxAd? ad,AdInfoData? bean) revenuePaid;
 
   IosAdCallback({
     required this.showSuccess,
     required this.showFail,
     required this.closeAd,
-    required this.onAdRevenuePaidCallback,
+    required this.revenuePaid,
   });
 }

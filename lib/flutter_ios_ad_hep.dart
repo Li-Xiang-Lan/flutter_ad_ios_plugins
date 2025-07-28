@@ -71,7 +71,7 @@ class FlutterIosAdHep{
 
           },
           onAdRevenuePaidCallback: (ad){
-            _iosAdCallback?.onAdRevenuePaidCallback.call(ad,_getAdInfoBeanById(ad.adUnitId));
+            _iosAdCallback?.revenuePaid.call(ad,_getAdInfoBeanById(ad.adUnitId));
           },
         )
     );
@@ -107,7 +107,7 @@ class FlutterIosAdHep{
             _iosAdCallback?.closeAd.call();
           },
           onAdRevenuePaidCallback: (ad){
-            _iosAdCallback?.onAdRevenuePaidCallback.call(ad,_getAdInfoBeanById(ad.adUnitId));
+            _iosAdCallback?.revenuePaid.call(ad,_getAdInfoBeanById(ad.adUnitId));
           },
         )
     );
