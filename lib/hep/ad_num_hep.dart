@@ -1,5 +1,5 @@
-import 'package:flutter_ad_ios_plugins/data/storage_data.dart';
 import 'package:flutter_ad_ios_plugins/hep/hep.dart';
+import 'package:get_storage/get_storage.dart';
 
 class AdNumHep{
   static final AdNumHep _instance = AdNumHep();
@@ -27,4 +27,21 @@ class AdNumHep{
     _todayClick++;
     _clickNumStorage.saveData("${todayTimeStr()}_$_todayClick");
   }
+}
+
+final GetStorage _getStorage=GetStorage();
+
+class StorageData<T>{
+  String key;
+  final T _defaultValue;
+  StorageData({
+    required this.key,
+    required T defaultValue
+  }):_defaultValue=defaultValue;
+
+  saveData(T t){
+    _getStorage.write(key, t);
+  }
+
+  T getData()=>_getStorage.read(key)??_defaultValue;
 }
