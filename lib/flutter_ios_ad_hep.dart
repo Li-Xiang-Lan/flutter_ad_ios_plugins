@@ -10,6 +10,8 @@ import 'package:flutter_ad_ios_plugins/hep/ios_ad_callback.dart';
 import 'package:flutter_ad_ios_plugins/hep/ios_load_ad_result_callback.dart';
 import 'package:flutter_ad_ios_plugins/load/new_load_ios_ad.dart';
 
+typedef FengKongLogic = bool Function();
+
 class FlutterIosAdHep{
   static final FlutterIosAdHep _instance = FlutterIosAdHep();
   static FlutterIosAdHep get instance => _instance;
@@ -19,6 +21,7 @@ class FlutterIosAdHep{
   NewLoadIosAd? _newRvLoadIosAd;
   var _adShowing=false,_priceSwitch=false;
   IosAdCallback? _iosAdCallback;
+  FengKongLogic? _fengKongLogic;
 
   initMax({
     required String maxKey,
@@ -122,6 +125,11 @@ class FlutterIosAdHep{
       iosAdCallback.showFail.call(null);
       return;
     }
+    if(checkFk()){
+      "flutter ios ad --->fengkong not show ad".log();
+      iosAdCallback.showFail.call(null);
+      return;
+    }
     _iosAdCallback=iosAdCallback;
     var resultData = getCacheResultData(adType);
     if(null!=resultData){
@@ -212,4 +220,19 @@ class FlutterIosAdHep{
   }
 
   bool adShowing()=>_adShowing;
+
+  setFengkongLogic(FengKongLogic logic){
+    _fengKongLogic=logic;
+  }
+
+  bool checkFk(){
+    if(null==_fengKongLogic){
+      return false;
+    }
+    return _fengKongLogic!();
+  }
+
+  setEverydayWatchAdNum(int maxShow){
+    AdNumHep.instance.setMaxShowNum(maxShow);
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:applovin_max/applovin_max.dart';
 import 'package:flutter_ad_ios_plugins/data/ad_info_data.dart';
 import 'package:flutter_ad_ios_plugins/data/load_result_data.dart';
+import 'package:flutter_ad_ios_plugins/flutter_ios_ad_hep.dart';
 import 'package:flutter_ad_ios_plugins/hep/ad_num_hep.dart';
 import 'package:flutter_ad_ios_plugins/hep/ad_type.dart';
 import 'package:flutter_ad_ios_plugins/hep/hep.dart';
@@ -37,6 +38,10 @@ class NewLoadIosAd{
   }
 
   bool loadAdById(AdInfoData value){
+    if(FlutterIosAdHep.instance.checkFk()){
+      "flutter ios ad --->${interAd ? "inter ad" : "rv ad"}--->fengkong not load ad".log();
+      return false;
+    }
     var indexWhere = _adInfoList.indexWhere((element) => element.adId==value.adId);
     if(indexWhere<0){
       return false;

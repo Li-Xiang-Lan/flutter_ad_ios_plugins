@@ -16,6 +16,10 @@ class AdNumHep{
     _todayClick=_clickNumStorage.getData().getTodayNum();
   }
 
+  setMaxShowNum(int maxShow){
+    _maxShow=maxShow;
+  }
+
   notLoad()=> _todayShow>=_maxShow||_todayClick>=_maxClick;
 
   updateShowNum(){
