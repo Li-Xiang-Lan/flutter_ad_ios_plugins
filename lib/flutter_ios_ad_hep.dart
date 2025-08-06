@@ -221,7 +221,7 @@ class FlutterIosAdHep{
 
   bool adShowing()=>_adShowing;
 
-  setFengkongLogic(FengKongLogic logic){
+  setFengkongLogic({required FengKongLogic logic}){
     _fengKongLogic=logic;
   }
 
