@@ -26,9 +26,11 @@ class FlutterIosAdHep{
   initMax({
     required String maxKey,
     required ConfigAdData data,
+    required FengKongLogic fengKongLogic,
     required IosLoadAdResultCallback iosLoadAdResultCallback,
     bool showMediationDebugger=false,
   })async{
+    _fengKongLogic=fengKongLogic;
     await AppLovinMAX.initialize(maxKey);
     if(kDebugMode&&showMediationDebugger){
       AppLovinMAX.showMediationDebugger();
@@ -220,10 +222,6 @@ class FlutterIosAdHep{
   }
 
   bool adShowing()=>_adShowing;
-
-  setFengkongLogic({required FengKongLogic logic}){
-    _fengKongLogic=logic;
-  }
 
   bool checkFk(){
     if(null==_fengKongLogic){
