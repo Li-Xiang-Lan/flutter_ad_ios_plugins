@@ -1,5 +1,9 @@
+import 'package:anythink_sdk/at_interstitial.dart';
+import 'package:anythink_sdk/at_rewarded.dart';
+import 'package:anythink_sdk/at_splash.dart';
 import 'package:applovin_max/applovin_max.dart';
 import 'package:flutter_ad_ios_plugins/data/ad_info_data.dart';
+import 'package:flutter_ad_ios_plugins/data/ad_money_info_bean.dart';
 import 'package:flutter_ad_ios_plugins/data/load_result_data.dart';
 import 'package:flutter_ad_ios_plugins/flutter_ios_ad_hep.dart';
 import 'package:flutter_ad_ios_plugins/hep/ad_num_hep.dart';
@@ -58,17 +62,47 @@ class NewLoadIosAd{
     "flutter ios ad --->${interAd ? "inter ad" : "rv ad"}--->start load ${value.adId} ,info=>${value.toString()}".log();
     if (value.adType == AdType.reward) {
       iosLoadAdResultCallback.startLoadAdCallback.call(value);
-      AppLovinMAX.loadRewardedAd(value.adId);
+      switch(value.adPlat){
+        case "max":
+          AppLovinMAX.loadRewardedAd(value.adId);
+          break;
+        case "topon":
+          ATRewardedManager.loadRewardedVideo(
+            placementID: value.adId,
+            extraMap: {
+              ATSplashManager.tolerateTimeout(): 20000
+            },
+          );
+          break;
+        default:
+          _loadingList.remove(value.adId);
+          break;
+      }
     } else if (value.adType == AdType.interstitial) {
       iosLoadAdResultCallback.startLoadAdCallback.call(value);
-      AppLovinMAX.loadInterstitial(value.adId);
+      switch(value.adPlat){
+        case "max":
+          AppLovinMAX.loadInterstitial(value.adId);
+          break;
+        case "topon":
+          ATInterstitialManager.loadInterstitialAd(
+            placementID: value.adId,
+            extraMap: {
+              ATSplashManager.tolerateTimeout(): 20000
+            },
+          );
+          break;
+        default:
+          _loadingList.remove(value.adId);
+          break;
+      }
     } else {
       _loadingList.remove(value.adId);
     }
     return true;
   }
 
-  loadAdSuccess(MaxAd ad){
+  loadAdSuccess(AdMoneyInfoBean ad){
     var adBean = getAdInfoBeanById(ad.adUnitId);
     if(null!=adBean){
       "flutter ios ad --->${interAd?"inter ad":"rv ad"}--->${ad.adUnitId} load ad success--->revenue:${ad.revenue}".log();

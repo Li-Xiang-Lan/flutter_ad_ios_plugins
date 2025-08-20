@@ -4,10 +4,11 @@ flutter_ad_ios_plugins
 
 ## Getting Started
 
-0.0.9 no B plan
-0.1.1 has B plan
-0.1.2 only B plan
-0.1.3 has switch B plan
+0.0.9 no B plan  only max
+0.1.1 has B plan  only max
+0.1.2 only B plan  only max
+0.1.4 has switch B plan  only max
+0.1.5 has switch B plan  max and topon
 
 This project is a starting point for a Flutter
 [plug-in package](https://flutter.dev/developing-packages/),

@@ -1,11 +1,12 @@
 import 'package:applovin_max/applovin_max.dart';
 import 'package:flutter_ad_ios_plugins/data/ad_info_data.dart';
+import 'package:flutter_ad_ios_plugins/data/ad_money_info_bean.dart';
 
 class IosAdCallback{
-  Function(MaxAd? ad,AdInfoData? bean) showSuccess;
-  Function(MaxAd? ad) showFail;
+  Function(AdMoneyInfoBean? ad,AdInfoData? bean) showSuccess;
+  Function() showFail;
   Function() closeAd;
-  Function(MaxAd? ad,AdInfoData? bean) revenuePaid;
+  Function(AdMoneyInfoBean? ad,AdInfoData? bean) revenuePaid;
 
   IosAdCallback({
     required this.showSuccess,
