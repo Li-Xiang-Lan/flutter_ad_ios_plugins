@@ -70,7 +70,8 @@ class NewLoadIosAd{
           ATRewardedManager.loadRewardedVideo(
             placementID: value.adId,
             extraMap: {
-              ATSplashManager.tolerateTimeout(): 20000
+              ATSplashManager.tolerateTimeout(): 20000,
+              ATRewardedManager.kATAdLoadingExtraUserIDKey(): '1234',
             },
           );
           break;

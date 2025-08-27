@@ -13,7 +13,9 @@ dependencies:
   plugin_platform_interface: ^2.0.2
   applovin_max: 4.4.0
   get_storage: 2.1.1
-  anythink_sdk: 1.0.7
+#  anythink_sdk: 1.0.7
+  anythink_sdk:
+    path: plugins/anythink_sdk
 
 dev_dependencies:
   flutter_test:

@@ -1,0 +1,66 @@
+group 'com.example.anythink_sdk'
+version '1.0'
+
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.4.2'
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: 'com.android.library'
+
+android {
+    namespace 'com.thinkup.flutter'
+    compileSdkVersion 34
+
+    defaultConfig {
+        minSdkVersion 21
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+
+//获取local.properties配置文件
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+////获取flutter的sdk路径
+//def flutterRoot = localProperties.getProperty('flutter.sdk')
+//if (flutterRoot == null) {
+//    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+//}
+
+dependencies {
+    compileOnly 'com.android.support:appcompat-v7:28.0.0'
+    compileOnly fileTree(dir: 'libs', include: '*.aar')
+    compileOnly fileTree(dir: 'libs_compile', include: '*.jar')
+    compileOnly 'androidx.annotation:annotation:1.1.0'
+    api "com.thinkup.sdk:core-tpn:6.4.88"
+    api "com.thinkup.sdk:nativead-tpn:6.4.88"
+    api "com.thinkup.sdk:banner-tpn:6.4.88"
+    api "com.thinkup.sdk:interstitial-tpn:6.4.88"
+    api "com.thinkup.sdk:rewardedvideo-tpn:6.4.88"
+    api "com.thinkup.sdk:splash-tpn:6.4.88"
+}
+
