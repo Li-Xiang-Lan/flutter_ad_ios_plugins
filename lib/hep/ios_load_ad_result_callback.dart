@@ -4,7 +4,7 @@ import 'package:flutter_ad_ios_plugins/data/ad_money_info_bean.dart';
 
 class IosLoadAdResultCallback{
   Function(AdInfoData? bean) startLoadAdCallback;
-  Function(AdMoneyInfoBean adMoneyInfoBean,AdInfoData? bean) loadAdSuccessCallback;
+  Function(AdMoneyInfoBean adMoneyInfoBean,AdInfoData? bean,int loadTime) loadAdSuccessCallback;
   Function(AdInfoData? bean) loadAdFailCallback;
 
   IosLoadAdResultCallback({

@@ -17,6 +17,7 @@ class NewLoadIosAd{
   final List<AdInfoData> _adInfoList=[];
   final List<String> _loadingList=[];
   final Map<String,LoadResultData> _resultMap={};
+  final Map<String,int> _loadAdStartTimeMap={};
   IosLoadAdResultCallback iosLoadAdResultCallback;
 
   NewLoadIosAd({
@@ -60,6 +61,7 @@ class NewLoadIosAd{
     }
     _loadingList.add(value.adId);
     "flutter ios ad --->${interAd ? "inter ad" : "rv ad"}--->start load ${value.adId} ,info=>${value.toString()}".log();
+    _loadAdStartTimeMap[value.adId]=DateTime.now().millisecondsSinceEpoch;
     if (value.adType == AdType.reward) {
       iosLoadAdResultCallback.startLoadAdCallback.call(value);
       switch(value.adPlat){
@@ -107,7 +109,12 @@ class NewLoadIosAd{
     var adBean = getAdInfoBeanById(ad.adUnitId);
     if(null!=adBean){
       "flutter ios ad --->${interAd?"inter ad":"rv ad"}--->${ad.adUnitId} load ad success--->revenue:${ad.revenue}".log();
-      iosLoadAdResultCallback.loadAdSuccessCallback.call(ad,adBean);
+      var startTime = _loadAdStartTimeMap[ad.adUnitId]??0;
+      var loadTime=0;
+      if(startTime!=0){
+        loadTime=DateTime.now().millisecondsSinceEpoch-startTime;
+      }
+      iosLoadAdResultCallback.loadAdSuccessCallback.call(ad,adBean,loadTime);
       _loadingList.remove(adBean.adId);
       _resultMap[adBean.adId]=LoadResultData(
         loadTime: DateTime.now().millisecondsSinceEpoch,
