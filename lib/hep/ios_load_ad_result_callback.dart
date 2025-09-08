@@ -6,10 +6,12 @@ class IosLoadAdResultCallback{
   Function(AdInfoData? bean) startLoadAdCallback;
   Function(AdMoneyInfoBean adMoneyInfoBean,AdInfoData? bean,int loadTime) loadAdSuccessCallback;
   Function(AdInfoData? bean) loadAdFailCallback;
+  Function(int time,String platForm) initSdkSuccess;
 
   IosLoadAdResultCallback({
     required this.startLoadAdCallback,
     required this.loadAdSuccessCallback,
     required this.loadAdFailCallback,
+    required this.initSdkSuccess,
   });
 }
