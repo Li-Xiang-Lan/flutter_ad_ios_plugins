@@ -2,6 +2,7 @@ import 'package:anythink_sdk/at_interstitial.dart';
 import 'package:anythink_sdk/at_rewarded.dart';
 import 'package:anythink_sdk/at_splash.dart';
 import 'package:applovin_max/applovin_max.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_ad_ios_plugins/data/ad_info_data.dart';
 import 'package:flutter_ad_ios_plugins/data/ad_money_info_bean.dart';
 import 'package:flutter_ad_ios_plugins/data/load_result_data.dart';
@@ -130,7 +131,9 @@ class NewLoadIosAd{
       "flutter ios ad --->${interAd?"inter ad":"rv ad"}--->$id load ad fail".log();
       iosLoadAdResultCallback.loadAdFailCallback.call(adBean);
       _loadingList.remove(adBean.adId);
-      loadAdById(adBean);
+      if(!kDebugMode){
+        loadAdById(adBean);
+      }
     }
   }
 
