@@ -21,7 +21,7 @@ class FlutterIosAdHep{
   //新方案加载插屏和激励
   NewLoadIosAd? _newIntLoadIosAd;
   NewLoadIosAd? _newRvLoadIosAd;
-  var _adShowing=false,_priceSwitch=false;
+  var _adShowing=false,_priceSwitch=false,_hasReward=false;
   IosAdCallback? _iosAdCallback;
   FengKongLogic? _fengKongLogic;
 
@@ -69,12 +69,14 @@ class FlutterIosAdHep{
           },
           onAdDisplayedCallback: (ad){
             _adShowing=true;
+            _hasReward=false;
             _deleteAdCache(ad.adUnitId);
             AdNumHep.instance.updateShowNum();
             _iosAdCallback?.showSuccess.call(_createAdMoneyInfoByMax(ad),_getAdInfoBeanById(ad.adUnitId));
           },
           onAdDisplayFailedCallback: (ad,error){
             _adShowing=false;
+            _hasReward=false;
             _deleteAdCache(ad.adUnitId);
             loadAd(_getAdInfoBeanById(ad.adUnitId));
             _iosAdCallback?.showFail.call();
@@ -85,10 +87,10 @@ class FlutterIosAdHep{
           onAdHiddenCallback: (ad){
             _adShowing=false;
             loadAd(_getAdInfoBeanById(ad.adUnitId));
-            _iosAdCallback?.closeAd.call();
+            _iosAdCallback?.closeAd.call(_createAdMoneyInfoByMax(ad),_getAdInfoBeanById(ad.adUnitId),_hasReward);
           },
           onAdReceivedRewardCallback: (ad,reward){
-
+            _hasReward=true;
           },
           onAdRevenuePaidCallback: (ad){
             _iosAdCallback?.revenuePaid.call(_createAdMoneyInfoByMax(ad),_getAdInfoBeanById(ad.adUnitId));
@@ -108,12 +110,14 @@ class FlutterIosAdHep{
           },
           onAdDisplayedCallback: (ad){
             _adShowing=true;
+            _hasReward=false;
             _deleteAdCache(ad.adUnitId);
             AdNumHep.instance.updateShowNum();
             _iosAdCallback?.showSuccess.call(_createAdMoneyInfoByMax(ad),_getAdInfoBeanById(ad.adUnitId));
           },
           onAdDisplayFailedCallback: (ad,error){
             _adShowing=false;
+            _hasReward=false;
             _deleteAdCache(ad.adUnitId);
             loadAd(_getAdInfoBeanById(ad.adUnitId));
             _iosAdCallback?.showFail.call();
@@ -124,7 +128,7 @@ class FlutterIosAdHep{
           onAdHiddenCallback: (ad){
             _adShowing=false;
             loadAd(_getAdInfoBeanById(ad.adUnitId));
-            _iosAdCallback?.closeAd.call();
+            _iosAdCallback?.closeAd.call(_createAdMoneyInfoByMax(ad),_getAdInfoBeanById(ad.adUnitId),_hasReward);
           },
           onAdRevenuePaidCallback: (ad){
             _iosAdCallback?.revenuePaid.call(_createAdMoneyInfoByMax(ad),_getAdInfoBeanById(ad.adUnitId));
@@ -145,13 +149,14 @@ class FlutterIosAdHep{
           break;
       //广告加载成功
         case RewardedStatus.rewardedVideoDidFinishLoading:
+          _hasReward=true;
           _newIntLoadIosAd?.loadAdSuccess(_createAdMoneyInfoByTopOn(adUnitId,event.extraMap));
           _newRvLoadIosAd?.loadAdSuccess(_createAdMoneyInfoByTopOn(adUnitId,event.extraMap));
           break;
       //广告展示成功
         case RewardedStatus.rewardedVideoDidStartPlaying:
           _adShowing=true;
-          _adShowing=true;
+          _hasReward=false;
           _deleteAdCache(adUnitId);
           AdNumHep.instance.updateShowNum();
           _iosAdCallback?.showSuccess.call(_createAdMoneyInfoByTopOn(adUnitId,event.extraMap),_getAdInfoBeanById(adUnitId));
@@ -159,6 +164,7 @@ class FlutterIosAdHep{
       //广告展示失败
         case RewardedStatus.rewardedVideoDidFailToPlay:
           _adShowing=false;
+          _hasReward=false;
           _deleteAdCache(adUnitId);
           loadAd(_getAdInfoBeanById(adUnitId));
           _iosAdCallback?.showFail.call();
@@ -171,7 +177,7 @@ class FlutterIosAdHep{
         case RewardedStatus.rewardedVideoDidClose:
           _adShowing=false;
           loadAd(_getAdInfoBeanById(adUnitId));
-          _iosAdCallback?.closeAd.call();
+          _iosAdCallback?.closeAd.call(_createAdMoneyInfoByTopOn(adUnitId,event.extraMap),_getAdInfoBeanById(adUnitId),_hasReward);
           break;
         default:
 
@@ -195,7 +201,6 @@ class FlutterIosAdHep{
       //广告展示成功
         case InterstitialStatus.interstitialDidShowSucceed:
           _adShowing=true;
-          _adShowing=true;
           _deleteAdCache(adUnitId);
           AdNumHep.instance.updateShowNum();
           _iosAdCallback?.showSuccess.call(_createAdMoneyInfoByTopOn(adUnitId,event.extraMap),_getAdInfoBeanById(adUnitId));
@@ -215,7 +220,7 @@ class FlutterIosAdHep{
         case InterstitialStatus.interstitialAdDidClose:
           _adShowing=false;
           loadAd(_getAdInfoBeanById(adUnitId));
-          _iosAdCallback?.closeAd.call();
+          _iosAdCallback?.closeAd.call(_createAdMoneyInfoByTopOn(adUnitId,event.extraMap),_getAdInfoBeanById(adUnitId),_hasReward);
           break;
         default:
 
