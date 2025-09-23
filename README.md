@@ -8,7 +8,8 @@ flutter_ad_ios_plugins
 0.1.1 has B plan  only max
 0.1.2 only B plan  only max
 0.1.4 has switch B plan  only max
-0.1.6 has switch B plan  max and topon
+0.1.6 has switch B plan  max4.4.0 and topon
+0.1.7 has switch B plan  max4.5.0 and topon
 
 This project is a starting point for a Flutter
 [plug-in package](https://flutter.dev/developing-packages/),
